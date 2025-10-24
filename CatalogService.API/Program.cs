@@ -1,6 +1,10 @@
 using CatalogService.API.Extensions;
+using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// NLog Configuration
+LogManager.Setup().LoadConfigurationFromFile(String.Concat(Directory.GetCurrentDirectory(),"/nlog.config"));
 
 // Add services to the container.
 

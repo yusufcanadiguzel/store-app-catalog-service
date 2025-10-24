@@ -361,3 +361,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignore NLog and app logs
+/internal_logs/
+/logs/
+*.log
+
+# Ignore internal logs
+CatalogService.API/internal_logs/
+*.log
