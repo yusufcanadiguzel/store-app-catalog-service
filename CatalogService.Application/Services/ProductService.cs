@@ -1,5 +1,6 @@
 ﻿using CatalogService.Application.Interfaces;
 using CatalogService.Domain.Entities;
+using CatalogService.Domain.Exceptions;
 using CatalogService.Domain.Interfaces;
 
 namespace CatalogService.Application.Services
@@ -29,7 +30,7 @@ namespace CatalogService.Application.Services
             var entityToDelete = _repositoryService.ProductRepository.FindByCondition(p => p.Id == id);
 
             if (entityToDelete is null)
-                throw new Exception($"Product with ID {id} could not found.");
+                throw new ProductNotFoundException(id);
 
             _repositoryService.ProductRepository.Delete(entityToDelete);
             _repositoryService.SaveChanges();
@@ -42,7 +43,12 @@ namespace CatalogService.Application.Services
 
         public Product GetOneProductById(int id)
         {
-            return _repositoryService.ProductRepository.FindByCondition(p => p.Id == id);
+            var product = _repositoryService.ProductRepository.FindByCondition(p => p.Id == id);
+
+            if (product is null)
+                throw new ProductNotFoundException(id);
+
+            return product;
         }
 
         public void UpdateOneProduct(int id, Product product)
@@ -50,7 +56,7 @@ namespace CatalogService.Application.Services
             var entityToUpdate = _repositoryService.ProductRepository.FindByCondition(p => p.Id == id);
 
             if (entityToUpdate is null)
-                throw new Exception($"Product with ID {id} could not found.");
+                throw new ProductNotFoundException(id);
 
             if (product is null)
                 throw new ArgumentNullException(nameof(product), "Product cannot be null.");
