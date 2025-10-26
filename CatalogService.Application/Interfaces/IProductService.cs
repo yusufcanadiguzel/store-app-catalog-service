@@ -1,4 +1,5 @@
-﻿using CatalogService.Domain.Entities;
+﻿using CatalogService.Application.DTOs;
+using CatalogService.Domain.Entities;
 
 namespace CatalogService.Application.Interfaces
 {
@@ -7,7 +8,7 @@ namespace CatalogService.Application.Interfaces
         IQueryable<Product> GetAllProducts();
         Product GetOneProductById(int id);
         Product CreateOneProduct(Product product);
-        void UpdateOneProduct(int id, Product product);
+        void UpdateOneProduct(int id, ProductDtoForUpdate productDto);
         void DeleteOneProduct(int id);
     }
 }

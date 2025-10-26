@@ -1,4 +1,5 @@
-﻿using CatalogService.Application.Interfaces;
+﻿using CatalogService.Application.DTOs;
+using CatalogService.Application.Interfaces;
 using CatalogService.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,72 +27,36 @@ namespace CatalogService.Presentation.Controllers
         [HttpGet("{id:int}")]
         public IActionResult GetOneProductById([FromRoute(Name = "id")] int id)
         {
-            try
-            {
-                var product = _serviceManager.ProductService.GetOneProductById(id);
+            var product = _serviceManager.ProductService.GetOneProductById(id);
 
-                if (product == null)
-                    return NotFound();
-
-                return Ok(product);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(product);
         }
 
         [HttpPost]
         public IActionResult CreateProduct([FromBody] Product product)
         {
-            try
-            {
-                _serviceManager.ProductService.CreateOneProduct(product);
+            _serviceManager.ProductService.CreateOneProduct(product);
 
-                return StatusCode(201, product);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return StatusCode(201, product);
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult UpdateOneProduct([FromRoute(Name = "id")] int id, [FromBody] Product product)
+        public IActionResult UpdateOneProduct([FromRoute(Name = "id")] int id, [FromBody] ProductDtoForUpdate productDto)
         {
-            try
-            {
-                var productToUpdate = _serviceManager.ProductService.GetOneProductById(id);
+            if (productDto is null)
+                throw new ArgumentNullException(nameof(productDto), "Product cannot be null.");
 
-                if (productToUpdate == null)
-                    return NotFound();
+            _serviceManager.ProductService.UpdateOneProduct(id, productDto);
 
-                if (productToUpdate.Id != id)
-                    return BadRequest("Product ID mismatch.");
-
-                _serviceManager.ProductService.UpdateOneProduct(id, product);
-
-                return Ok(productToUpdate);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return NoContent();
         }
 
         [HttpDelete("{id:int}")]
         public IActionResult DeleteOneProduct([FromRoute(Name = "id")] int id)
         {
-            try
-            {
-                _serviceManager.ProductService.DeleteOneProduct(id);
+            _serviceManager.ProductService.DeleteOneProduct(id);
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return NoContent();
         }
     }
 }
