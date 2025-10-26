@@ -4,7 +4,7 @@ using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// NLog Configuration
+// NLog configuration
 LogManager.Setup().LoadConfigurationFromFile(String.Concat(Directory.GetCurrentDirectory(),"/nlog.config"));
 
 // Add services to the container.
@@ -25,6 +25,15 @@ builder.ConfigureDependencyResolver();
 builder.ConfigureSqlConnection();
 
 var app = builder.Build();
+
+// Configure custom exception middleware
+var loggerService = app.Services.GetRequiredService<ILoggerService>();
+app.ConfigureExceptionHandler(loggerService);
+
+if (app.Environment.IsProduction())
+{
+    app.UseHsts();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
