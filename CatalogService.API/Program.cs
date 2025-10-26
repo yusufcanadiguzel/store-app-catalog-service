@@ -1,5 +1,5 @@
 using CatalogService.API.Extensions;
-using CatalogService.Application.Interfaces;
+using CatalogService.Application.Mapping.AutoMapper;
 using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +14,9 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// AutoMapper Configuration
+builder.Services.AddAutoMapper(cfg => { }, typeof(AmMappingProfile));
 
 // Autofac Configuration
 builder.ConfigureDependencyResolver();
