@@ -1,4 +1,5 @@
 using CatalogService.API.Extensions;
+using CatalogService.Application.Interfaces;
 using CatalogService.Application.Mapping.AutoMapper;
 using NLog;
 
@@ -9,7 +10,15 @@ LogManager.Setup().LoadConfigurationFromFile(String.Concat(Directory.GetCurrentD
 
 // Add services to the container.
 
-builder.Services.AddControllers()
+builder.Services.AddControllers(config =>
+{
+    // Enable content negotiation based on Accept header
+    config.RespectBrowserAcceptHeader = true;
+
+    // Return 406 Not Acceptable if the requested format is not supported
+    config.ReturnHttpNotAcceptable = true;
+})
+    .AddXmlDataContractSerializerFormatters() // Support XML format in addition to JSON
     .AddApplicationPart(typeof(CatalogService.Presentation.AssemblyReference).Assembly);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

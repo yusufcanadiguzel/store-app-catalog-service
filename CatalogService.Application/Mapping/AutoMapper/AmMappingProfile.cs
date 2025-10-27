@@ -8,7 +8,10 @@ namespace CatalogService.Application.Mapping.AutoMapper
     {
         public AmMappingProfile()
         {
+            // Product Mappings
             CreateMap<ProductDtoForUpdate, Product>();
+            CreateMap<Product, ProductDto>();
+            CreateMap<ProductDtoForCreate, Product>();
         }
     }
 }
