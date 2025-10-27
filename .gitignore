@@ -370,3 +370,10 @@ FodyWeavers.xsd
 # Ignore internal logs
 CatalogService.API/internal_logs/
 *.log
+
+# Ignore appsettings
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+CatalogService.API/appsettings.json
+CatalogService.API/appsettings.*.json

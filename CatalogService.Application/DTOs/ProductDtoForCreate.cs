@@ -1,8 +1,7 @@
 ﻿namespace CatalogService.Application.DTOs
 {
-    public record ProductDtoForUpdate
+    public record ProductDtoForCreate
     {
-        public int Id { get; set; }
         public string Name { get; init; }
         public string Description { get; init; }
         public decimal Price { get; init; }

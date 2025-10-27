@@ -17,7 +17,7 @@ namespace CatalogService.Infrastructure.Persistence.Repositories.EFCore
 
         public void Delete(T entity) => _dbContext.Set<T>().Remove(entity);
 
-        public IQueryable<T> FindAll(Expression<Func<T, bool>>? expression = null) => 
+        public IEnumerable<T> FindAll(Expression<Func<T, bool>>? expression = null) => 
             expression != null
             ? _dbContext.Set<T>().Where(expression)
             : _dbContext.Set<T>();

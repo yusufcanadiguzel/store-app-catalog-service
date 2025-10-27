@@ -18,15 +18,14 @@ namespace CatalogService.Application.Services
             _mapper = mapper;
         }
 
-        public Product CreateOneProduct(Product product)
+        public void CreateOneProduct(ProductDtoForCreate productDtoForCreate)
         {
-            if (product is null)
-                throw new ArgumentNullException(nameof(product), "Product cannot be null.");
+            if (productDtoForCreate is null)
+                throw new ArgumentNullException(nameof(productDtoForCreate), "Product cannot be null.");
 
-            _repositoryService.ProductRepository.Create(product);
+            _repositoryService.ProductRepository.Create(_mapper.Map<Product>(productDtoForCreate));
+
             _repositoryService.SaveChanges();
-
-            return product;
         }
 
         public void DeleteOneProduct(int id)
@@ -40,19 +39,25 @@ namespace CatalogService.Application.Services
             _repositoryService.SaveChanges();
         }
 
-        public IQueryable<Product> GetAllProducts()
+        public IEnumerable<ProductDto> GetAllProducts()
         {
-            return _repositoryService.ProductRepository.FindAll();
+            var products = _repositoryService.ProductRepository.FindAll();
+
+            var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
+
+            return productsDto;
         }
 
-        public Product GetOneProductById(int id)
+        public ProductDto GetOneProductById(int id)
         {
             var product = _repositoryService.ProductRepository.FindByCondition(p => p.Id == id);
 
             if (product is null)
                 throw new ProductNotFoundException(id);
 
-            return product;
+            var productDto = _mapper.Map<ProductDto>(product);
+
+            return productDto;
         }
 
         public void UpdateOneProduct(int id, ProductDtoForUpdate productDto)

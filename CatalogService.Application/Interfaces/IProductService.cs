@@ -5,9 +5,9 @@ namespace CatalogService.Application.Interfaces
 {
     public interface IProductService
     {
-        IQueryable<Product> GetAllProducts();
-        Product GetOneProductById(int id);
-        Product CreateOneProduct(Product product);
+        IEnumerable<ProductDto> GetAllProducts();
+        ProductDto GetOneProductById(int id);
+        void CreateOneProduct(ProductDtoForCreate product);
         void UpdateOneProduct(int id, ProductDtoForUpdate productDto);
         void DeleteOneProduct(int id);
     }

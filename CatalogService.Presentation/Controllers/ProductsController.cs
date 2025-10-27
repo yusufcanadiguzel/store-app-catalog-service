@@ -33,11 +33,11 @@ namespace CatalogService.Presentation.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProduct([FromBody] Product product)
+        public IActionResult CreateProduct([FromBody] ProductDtoForCreate productDtoForCreate)
         {
-            _serviceManager.ProductService.CreateOneProduct(product);
+            _serviceManager.ProductService.CreateOneProduct(productDtoForCreate);
 
-            return StatusCode(201, product);
+            return Created();
         }
 
         [HttpPut("{id:int}")]
