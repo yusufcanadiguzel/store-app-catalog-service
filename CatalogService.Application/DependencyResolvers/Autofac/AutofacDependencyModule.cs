@@ -1,9 +1,12 @@
 ﻿using Autofac;
+using CatalogService.Application.DTOs;
 using CatalogService.Application.Interfaces;
 using CatalogService.Application.Services;
+using CatalogService.Application.Validation.FluentValidation;
 using CatalogService.Domain.Interfaces;
 using CatalogService.Infrastructure.Persistence.Repositories;
 using CatalogService.Infrastructure.Persistence.Repositories.EFCore;
+using FluentValidation;
 
 namespace CatalogService.Application.DependencyResolvers.Autofac
 {
@@ -21,6 +24,9 @@ namespace CatalogService.Application.DependencyResolvers.Autofac
 
             // Logger Service Registration
             builder.RegisterType<LoggerManager>().As<ILoggerService>().SingleInstance();
+
+            // Validator Service Registration
+            builder.RegisterType<FvProductValidator>().As<IValidator<ProductDtoForCreate>>().InstancePerLifetimeScope();
         }
     }
 }

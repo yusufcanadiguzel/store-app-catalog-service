@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using CatalogService.Application.DTOs;
+using CatalogService.Application.Exceptions;
 using CatalogService.Application.Interfaces;
 using CatalogService.Domain.Entities;
 using CatalogService.Domain.Exceptions;
 using CatalogService.Domain.Interfaces;
+using FluentValidation;
 
 namespace CatalogService.Application.Services
 {
@@ -11,17 +13,24 @@ namespace CatalogService.Application.Services
     {
         private readonly IRepositoryService _repositoryService;
         private readonly IMapper _mapper;
+        private readonly IValidator<ProductDtoForCreate> _validator;
 
-        public ProductService(IRepositoryService repositoryService, IMapper mapper)
+        public ProductService(IRepositoryService repositoryService, IMapper mapper, IValidator<ProductDtoForCreate> validator)
         {
             _repositoryService = repositoryService;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public void CreateOneProduct(ProductDtoForCreate productDtoForCreate)
         {
             if (productDtoForCreate is null)
                 throw new ArgumentNullException(nameof(productDtoForCreate), "Product cannot be null.");
+
+            var validationResult = _validator.Validate(productDtoForCreate);
+
+            if (!validationResult.IsValid)
+                throw new ProductNotValidException(validationResult.ToString());
 
             _repositoryService.ProductRepository.Create(_mapper.Map<Product>(productDtoForCreate));
 

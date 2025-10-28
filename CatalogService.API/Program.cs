@@ -1,6 +1,8 @@
 using CatalogService.API.Extensions;
 using CatalogService.Application.Interfaces;
 using CatalogService.Application.Mapping.AutoMapper;
+using CatalogService.Application.Validation.FluentValidation;
+using FluentValidation;
 using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +28,9 @@ builder.Services.AddSwaggerGen();
 
 // AutoMapper Configuration
 builder.Services.AddAutoMapper(cfg => { }, typeof(AmMappingProfile));
+
+// Fluent Validation Configuration
+builder.Services.AddValidatorsFromAssemblyContaining<FvProductValidator>();
 
 // Autofac Configuration
 builder.ConfigureDependencyResolver();
