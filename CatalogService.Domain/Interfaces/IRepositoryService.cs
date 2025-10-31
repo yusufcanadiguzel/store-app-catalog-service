@@ -4,6 +4,6 @@
     {
         IProductRepository ProductRepository { get; }
 
-        void SaveChanges();
+        Task SaveChangesAsync();
     }
 }

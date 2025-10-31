@@ -9,10 +9,10 @@ namespace CatalogService.Infrastructure.Persistence.Repositories.EFCore
         {
         }
 
-        public IEnumerable<Product> GetAllProducts() => FindAll();
-        public Product GetOneProductById(int id) => FindByCondition(p => p.Id == id);
-        public void AddProduct(Product product) => Create(product);
-        public void UpdateProduct(Product product) => Update(product);
-        public void DeleteProduct(Product product) => Delete(product);
+        public async Task<IEnumerable<Product>> GetAllProductsAsync() => await FindAllAsync();
+        public async Task<Product?> GetOneProductByIdAsync(int id) => await FindByConditionAsync(p => p.Id == id);
+        public async Task AddProductAsync(Product product) => await CreateAsync(product);
+        public async Task UpdateProductAsync(Product product) => await UpdateAsync(product);
+        public async Task DeleteProductAsync(Product product) => await DeleteAsync(product);
     }
 }

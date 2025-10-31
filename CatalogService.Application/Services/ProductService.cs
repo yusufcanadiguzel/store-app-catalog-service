@@ -22,7 +22,7 @@ namespace CatalogService.Application.Services
             _validator = validator;
         }
 
-        public void CreateOneProduct(ProductDtoForCreate productDtoForCreate)
+        public async Task CreateOneProductAsync(ProductDtoForCreate productDtoForCreate)
         {
             if (productDtoForCreate is null)
                 throw new ArgumentNullException(nameof(productDtoForCreate), "Product cannot be null.");
@@ -32,34 +32,34 @@ namespace CatalogService.Application.Services
             if (!validationResult.IsValid)
                 throw new ProductNotValidException(validationResult.ToString());
 
-            _repositoryService.ProductRepository.Create(_mapper.Map<Product>(productDtoForCreate));
+            await _repositoryService.ProductRepository.CreateAsync(_mapper.Map<Product>(productDtoForCreate));
 
-            _repositoryService.SaveChanges();
+            await _repositoryService.SaveChangesAsync();
         }
 
-        public void DeleteOneProduct(int id)
+        public async Task DeleteOneProductAsync(int id)
         {
-            var entityToDelete = _repositoryService.ProductRepository.FindByCondition(p => p.Id == id);
+            var entityToDelete = await _repositoryService.ProductRepository.FindByConditionAsync(p => p.Id == id);
 
             if (entityToDelete is null)
                 throw new ProductNotFoundException(id);
 
-            _repositoryService.ProductRepository.Delete(entityToDelete);
-            _repositoryService.SaveChanges();
+            await _repositoryService.ProductRepository.DeleteAsync(entityToDelete);
+            await _repositoryService.SaveChangesAsync();
         }
 
-        public IEnumerable<ProductDto> GetAllProducts()
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
         {
-            var products = _repositoryService.ProductRepository.FindAll();
+            var products = await _repositoryService.ProductRepository.FindAllAsync();
 
             var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
 
             return productsDto;
         }
 
-        public ProductDto GetOneProductById(int id)
+        public async Task<ProductDto> GetOneProductByIdAsync(int id)
         {
-            var product = _repositoryService.ProductRepository.FindByCondition(p => p.Id == id);
+            var product = await _repositoryService.ProductRepository.FindByConditionAsync(p => p.Id == id);
 
             if (product is null)
                 throw new ProductNotFoundException(id);
@@ -69,18 +69,18 @@ namespace CatalogService.Application.Services
             return productDto;
         }
 
-        public void UpdateOneProduct(int id, ProductDtoForUpdate productDto)
+        public async Task UpdateOneProductAsync(int id, ProductDtoForUpdate productDto)
         {
-            var entityToUpdate = _repositoryService.ProductRepository.FindByCondition(p => p.Id == id);
+            var entityToUpdate = await _repositoryService.ProductRepository.FindByConditionAsync(p => p.Id == id);
 
             if (entityToUpdate is null)
                 throw new ProductNotFoundException(id);
 
             _mapper.Map(productDto, entityToUpdate);
 
-            _repositoryService.ProductRepository.Update(entityToUpdate);
+            await _repositoryService.ProductRepository.UpdateAsync(entityToUpdate);
 
-            _repositoryService.SaveChanges();
+            await _repositoryService.SaveChangesAsync();
         }
     }
 }
