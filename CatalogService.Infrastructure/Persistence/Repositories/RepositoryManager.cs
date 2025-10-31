@@ -15,6 +15,6 @@ namespace CatalogService.Infrastructure.Persistence.Repositories
 
         public IProductRepository ProductRepository => _productRepository.Value;
 
-        public void SaveChanges() => _dbContext.SaveChanges();
+        public Task SaveChangesAsync() => _dbContext.SaveChangesAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CatalogService.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace CatalogService.Infrastructure.Persistence.Repositories.EFCore
@@ -13,18 +14,28 @@ namespace CatalogService.Infrastructure.Persistence.Repositories.EFCore
             _dbContext = dbContext;
         }
 
-        public void Create(T entity) => _dbContext.Set<T>().Add(entity);
+        public async Task CreateAsync(T entity) => await _dbContext.Set<T>().AddAsync(entity);
 
-        public void Delete(T entity) => _dbContext.Set<T>().Remove(entity);
+        public Task DeleteAsync(T entity)
+        {
+            _dbContext.Set<T>().Remove(entity);
 
-        public IEnumerable<T> FindAll(Expression<Func<T, bool>>? expression = null) => 
+            return Task.CompletedTask;
+        }
+
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>>? expression = null) => 
             expression != null
-            ? _dbContext.Set<T>().Where(expression)
-            : _dbContext.Set<T>();
+            ? await _dbContext.Set<T>().Where(expression).ToListAsync()
+            : await _dbContext.Set<T>().ToListAsync();
 
-        public T FindByCondition(Expression<Func<T, bool>> expression) =>
-            _dbContext.Set<T>().Where(expression).FirstOrDefault();
+        public async Task<T?> FindByConditionAsync(Expression<Func<T, bool>> expression) =>
+            await _dbContext.Set<T>().Where(expression).FirstOrDefaultAsync();
 
-        public void Update(T entity) => _dbContext.Set<T>().Update(entity);
+        public Task UpdateAsync(T entity)
+        {
+            _dbContext.Set<T>().Update(entity);
+
+            return Task.CompletedTask;
+        }
     }
 }

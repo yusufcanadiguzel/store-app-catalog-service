@@ -4,10 +4,10 @@ namespace CatalogService.Domain.Interfaces
 {
     public interface IEntityRepositoryBase<T>
     {
-        IEnumerable<T> FindAll(Expression<Func<T, bool>>? expression = null);
-        T FindByCondition(Expression<Func<T, bool>> expression);
-        void Create(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>>? expression = null);
+        Task<T?> FindByConditionAsync(Expression<Func<T, bool>> expression);
+        Task CreateAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task DeleteAsync(T entity);
     }
 }

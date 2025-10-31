@@ -5,10 +5,10 @@ namespace CatalogService.Application.Interfaces
 {
     public interface IProductService
     {
-        IEnumerable<ProductDto> GetAllProducts();
-        ProductDto GetOneProductById(int id);
-        void CreateOneProduct(ProductDtoForCreate product);
-        void UpdateOneProduct(int id, ProductDtoForUpdate productDto);
-        void DeleteOneProduct(int id);
+        Task<IEnumerable<ProductDto>> GetAllProductsAsync();
+        Task<ProductDto> GetOneProductByIdAsync(int id);
+        Task CreateOneProductAsync(ProductDtoForCreate product);
+        Task UpdateOneProductAsync(int id, ProductDtoForUpdate productDto);
+        Task DeleteOneProductAsync(int id);
     }
 }
